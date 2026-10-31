@@ -50,9 +50,12 @@
 	padding-bottom: calc(0.6em + var(--list-spacing));
 }
 
-/* 列表里的代码块：整块（含外框）缩进到所属列表项的文字处；Obsidian 用 !important 把行外边距清零，只能同样用 !important 覆盖 */
+/* 列表里的代码块：整块（含外框）缩进到所属列表项的文字处。Obsidian 用 !important 清零行外边距，改用相对定位右移并收窄 */
 .markdown-source-view.mod-cm6 .cm-content > .hd-list-code {
-	margin-inline-start: calc((var(--hd-list-code-level) - 1) * var(--list-indent) + round(1.625 * var(--font-text-size), 1px)) !important;
+	--hd-list-code-indent: calc((var(--hd-list-code-level) - 1) * var(--list-indent) + round(1.625 * var(--font-text-size), 1px));
+
+	inset-inline-start: var(--hd-list-code-indent);
+	width: calc(100% - var(--hd-list-code-indent));
 	padding-block: 0;
 	padding-inline-start: var(--size-4-4);
 }

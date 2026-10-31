@@ -1,0 +1,3 @@
+node_modules
+# 构建产物（只忽略根目录的 main.js，src/main.js 是源码）
+/main.js

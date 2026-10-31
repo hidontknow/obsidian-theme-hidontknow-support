@@ -1,8 +1,8 @@
 // Hidontknow Support：补上 Hidontknow 主题用 CSS 做不到的部分，让实时预览与阅读模式一致
-const { Plugin, editorLivePreviewField, loadPrism } = require("obsidian");
-const { StateEffect, StateField } = require("@codemirror/state");
-const { Decoration, EditorView, WidgetType } = require("@codemirror/view");
-const { syntaxTree } = require("@codemirror/language");
+import { Plugin, editorLivePreviewField, loadPrism } from "obsidian";
+import { StateField } from "@codemirror/state";
+import { Decoration, EditorView, WidgetType } from "@codemirror/view";
+import { syntaxTree } from "@codemirror/language";
 
 class HtmlWidget extends WidgetType {
 	constructor(key, make, interactive = false) {
@@ -41,9 +41,9 @@ const LIST_ITEM = /^([ \t]*)([-*+]|(\d+)([.)]))( |$)/;
 const FN_DEF = /^\[\^([^\]]+)\]:[ \t]?/;
 
 // —— 代码高亮：编辑器也用阅读模式的 Prism 切分，token 加上与阅读模式相同的类，配色完全一致 ——
+let Prism = null; // 插件加载时由 loadPrism() 取得，与阅读模式是同一份
 const prismCache = new Map();
 function prismClasses(code, lang) {
-	const Prism = window.Prism;
 	const grammar = Prism && Prism.languages[lang];
 	if (!grammar) return null;
 	const key = lang + "\u0000" + code;
@@ -115,8 +115,6 @@ function highlightCode(doc, info, decos) {
 		}
 	}
 }
-
-const refresh = StateEffect.define();
 
 // shortcut: 每次文档、选区或语法树变化都扫描全文；笔记上万行时可能变慢，届时改成只处理可视区域
 function build(state, code) {
@@ -350,7 +348,7 @@ function build(state, code) {
 }
 
 const live = (s) => s.field(editorLivePreviewField, false);
-const changed = (tr) => tr.docChanged || tr.effects.some((e) => e.is(refresh)) || syntaxTree(tr.state) !== syntaxTree(tr.startState) || live(tr.state) !== live(tr.startState);
+const changed = (tr) => tr.docChanged || syntaxTree(tr.state) !== syntaxTree(tr.startState) || live(tr.state) !== live(tr.startState);
 
 // 代码高亮只随文档变化重建；其余装饰还要随选区变化（光标碰到时显示源码），分开后移动光标不必重算整块代码
 const codeField = StateField.define({
@@ -365,17 +363,10 @@ const field = StateField.define({
 	provide: (f) => EditorView.decorations.from(f),
 });
 
-module.exports = class HidontknowSupport extends Plugin {
-	onload() {
+export default class HidontknowSupport extends Plugin {
+	async onload() {
+		// Obsidian 按需加载 Prism；先加载好再注册，编辑器一打开就能按 Prism 上色
+		Prism = await loadPrism();
 		this.registerEditorExtension([codeField, field]);
-		// Obsidian 按需加载 Prism；加载好后让已打开的编辑器重新上色
-		if (!window.Prism) {
-			loadPrism().then(() => {
-				this.app.workspace.iterateAllLeaves((leaf) => {
-					const cm = leaf.view && leaf.view.editor && leaf.view.editor.cm;
-					if (cm) cm.dispatch({ effects: refresh.of(null) });
-				});
-			});
-		}
 	}
-};
+}

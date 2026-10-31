@@ -30,6 +30,10 @@
 
 插件是按 Hidontknow 主题设计的，配合其他主题时间距可能对不上。
 
+## 开发
+
+源码在 `src/main.js`。运行 `npm ci`、`npm run build` 打包成 `main.js`。
+
 ## 许可证
 
 [MIT](LICENSE)

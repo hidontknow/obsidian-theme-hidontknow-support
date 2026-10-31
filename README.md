@@ -30,6 +30,10 @@ Until the plugin is in the community directory, copy `main.js`, `manifest.json` 
 
 The plugin is designed for the Hidontknow theme. With other themes the spacing may not match.
 
+## Development
+
+The source is `src/main.js`. Run `npm ci` and `npm run build` to bundle it into `main.js`.
+
 ## License
 
 [MIT](LICENSE)
