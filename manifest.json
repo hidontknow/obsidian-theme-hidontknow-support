@@ -1,7 +1,7 @@
 {
 	"id": "hidontknow-support",
 	"name": "Hidontknow Support",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"minAppVersion": "1.14.0",
 	"description": "Companion for the Hidontknow theme: makes Live Preview match Reading view for lists in quotes, code blocks in lists, footnotes, %% comments, ordered list numbering and code highlighting.",
 	"author": "hidontknow",

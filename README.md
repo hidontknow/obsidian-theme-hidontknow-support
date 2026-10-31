@@ -12,7 +12,15 @@ A companion plugin for the [Hidontknow theme](https://github.com/hidontknow/obsi
 | Footnote definitions at the end of the note | Inline labels | A footnote section like Reading view: separator, numbers, `↩︎` back link |
 | `%%comments%%` | Shown, dimmed | Hidden. A block comment takes its trailing blank lines with it, so the gap between paragraphs matches Reading view |
 | Code highlighting | CodeMirror's highlighter, which splits code differently from Reading view | Highlighted with Reading view's Prism, so colors and styles match character by character |
-| Ordered list numbers | `10.` stays `10.` | Renumbered like Reading view: the list counts up from its first number |
+| List markers | `-`, `*`, `+` all look the same; Reading view drops `)` from `1)` | `-` filled dot, `*` hollow circle, `+` square, `1)` keeps its parenthesis, in both views |
+| Task items that wrap | Wrapped lines can start up to 1px left of the first line | Wrapped lines line up exactly with the first line's text |
+| Ordered list numbers | `10.` stays `10.` | Renumbered the same way in both views: a list counts up from its first number, and an ordered list that directly follows a different kind of list (bullets, or `1.` vs `1)`) starts again at 1 |
+
+When a list item changes level (pressing Enter on an empty item, Tab or Shift+Tab), its marker switches to match the list at the new level, and the following items are renumbered. This is undone together with the edit. Typing a different marker yourself is left alone.
+
+When you type or edit an ordered list item, the numbers in the source are rewritten to the numbers shown, so the file matches what you see (for example, typing `7.` after `2.` becomes `3.`, and an ordered list right after a bullet list starts at `1.`). Only the list you are editing is changed; undo, opening a file and Source mode leave numbers alone.
+
+In Reading view, the plugin also follows the blank lines in the source: blocks with no blank line between them sit directly together, two blank lines leave two lines of space, and blank lines between list items (loose lists) are kept, just like in the editor.
 
 Whenever the cursor touches one of these, the original Markdown is shown so you can edit it, just like Obsidian's own markup.
 
