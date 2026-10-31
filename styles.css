@@ -1,0 +1,119 @@
+/* 引用里的列表：标记区宽度与列表一致，每项上下留 --list-spacing，列表与段落之间留 1em（阅读模式的列表外边距） */
+.markdown-source-view.mod-cm6 .hd-ql {
+	padding-block: var(--list-spacing);
+}
+
+.markdown-source-view.mod-cm6 .hd-ql-start {
+	padding-top: calc(1em + var(--list-spacing));
+}
+
+.markdown-source-view.mod-cm6 .hd-ql-end {
+	padding-bottom: calc(1em + var(--list-spacing));
+}
+
+.hd-ql-marker {
+	display: inline-flex;
+	margin-inline-start: calc(var(--hd-ql-level, 0) * var(--list-indent));
+	position: relative;
+	justify-content: flex-end;
+	width: var(--hd-list-marker, 1.625em);
+	text-indent: 0;
+	white-space: pre;
+}
+
+.hd-ql-num {
+	color: var(--list-marker-color);
+	font-variant-numeric: tabular-nums;
+}
+
+.hd-ql-bullet {
+	position: absolute;
+	top: calc(var(--font-text-size) * var(--line-height-normal) / 2 - var(--list-bullet-size) / 2);
+	right: calc(0.8em - var(--list-bullet-size) / 2);
+	width: var(--list-bullet-size);
+	height: var(--list-bullet-size);
+	border-radius: 50%;
+	background-color: var(--list-marker-color);
+}
+
+.hd-ql-task .task-list-item-checkbox {
+	top: 0.2em;
+	margin: 0 0.6em 0 0;
+}
+
+/* 列表在引用开头或结尾时，叠加引用自身的上下内边距 */
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-quote.hd-ql.hd-ql-first {
+	padding-top: calc(0.6em + var(--list-spacing));
+}
+
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-quote.hd-ql.hd-ql-last {
+	padding-bottom: calc(0.6em + var(--list-spacing));
+}
+
+/* 列表里的代码块：整块（含外框）缩进到所属列表项的文字处；Obsidian 用 !important 把行外边距清零，只能同样用 !important 覆盖 */
+.markdown-source-view.mod-cm6 .cm-content > .hd-list-code {
+	margin-inline-start: calc((var(--hd-list-code-level) - 1) * var(--list-indent) + round(1.625 * var(--font-text-size), 1px)) !important;
+	padding-block: 0;
+	padding-inline-start: var(--size-4-4);
+}
+
+/* 脚注引用：与阅读模式的上标相同 */
+.hd-fn-ref {
+	line-height: 0;
+}
+
+/* 文末脚注区 */
+.markdown-source-view.mod-cm6 .hd-fn-def {
+	padding-block: var(--list-spacing);
+	font-size: var(--footnote-size);
+}
+
+.hd-fn-num {
+	display: inline-flex;
+	justify-content: flex-end;
+	width: round(1.625em, 1px); /* 与阅读模式脚注列表的左边距相同 */
+	padding-inline-end: 0.3em;
+	color: var(--list-marker-color);
+	text-indent: 0;
+}
+
+.hd-fn-sep {
+	padding-block: 2rem;
+}
+
+.hd-fn-sep hr {
+	margin: 0;
+}
+
+.markdown-source-view .footnote-backref.footnote-link {
+	margin-inline-start: 4px;
+	color: var(--text-faint);
+	cursor: pointer;
+}
+
+/* 有序列表重排后的序号：隐藏源码数字，显示阅读模式的编号 */
+.hd-ol-renum {
+	font-size: 0;
+}
+
+.hd-ol-renum::before {
+	content: attr(data-n);
+	font-size: var(--font-text-size);
+}
+
+/* 引用里已完成的任务：与阅读模式的已完成任务相同 */
+.markdown-source-view.mod-cm6 .hd-ql-done {
+	color: var(--checklist-done-color);
+	text-decoration: var(--checklist-done-decoration);
+}
+
+/* 代码块用 Prism 上色后，让 CodeMirror 自带的配色让位：行内文字统一从行继承，由 token 类决定颜色和字重 */
+.markdown-source-view.mod-cm6 .cm-line.hd-prism {
+	color: var(--code-normal);
+}
+
+.markdown-source-view.mod-cm6 .cm-line.hd-prism span.cm-hmd-codeblock {
+	color: inherit;
+	font-weight: inherit;
+	font-style: inherit;
+}
